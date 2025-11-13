@@ -46,7 +46,7 @@ function CreateArticle() {
 
     try {
       // Create article via REST API
-      await axios.post('http://localhost:5000/articles/add', article);
+      await axios.post('https://blog-app-y9pg.onrender.com/articles', article);
       // Navigate back to article list after successful creation
       navigate('/');
     } catch (err) {

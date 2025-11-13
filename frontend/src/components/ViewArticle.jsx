@@ -18,7 +18,7 @@ function ViewArticle() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/articles/${id}`);
+        const response = await axios.get(`https://blog-app-y9pg.onrender.com/articles/${id}`);
         setArticle(response.data);
         setLoading(false);
       } catch (err) {
@@ -36,7 +36,7 @@ function ViewArticle() {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this article?')) {
       try {
-        await axios.delete(`http://localhost:5000/articles/${id}`);
+        await axios.delete(`https://blog-app-y9pg.onrender.com/articles/${id}`);
         navigate('/');
       } catch (err) {
         console.error('Error deleting article:', err);

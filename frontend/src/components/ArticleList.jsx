@@ -82,7 +82,7 @@ export default class ArticleList extends Component {
   // Method to fetch articles from the backend API
   fetchArticles = () => {
     // Send a GET request to our backend API (without filters)
-    axios.get('http://localhost:5000/articles/')
+    axios.get('https://blog-app-y9pg.onrender.com/articles')
       .then(response => {
         const articles = response.data;
         // Extract all unique tags from all articles
@@ -129,7 +129,7 @@ export default class ArticleList extends Component {
       params.date = this.state.dateFilter;
     }
 
-    axios.get('http://localhost:5000/articles/', { params })
+    axios.get('https://blog-app-y9pg.onrender.com/articles', { params })
       .then(response => {
         const articles = response.data;
         // Get all unique tags from ALL articles (fetch once without filters for tags dropdown)
@@ -149,7 +149,7 @@ export default class ArticleList extends Component {
 
   // Helper method to fetch all tags from all articles
   fetchAllTags = () => {
-    return axios.get('http://localhost:5000/articles/')
+    return axios.get('https://blog-app-y9pg.onrender.com/articles')
       .then(response => {
         const allTags = [...new Set(response.data.flatMap(article => article.tags || []))];
         return allTags.sort();
@@ -167,7 +167,7 @@ export default class ArticleList extends Component {
   // Event handler for the delete button
   deleteArticle(id) {
     // Send a DELETE request to the backend
-    axios.delete('http://localhost:5000/articles/' + id)
+    axios.delete('https://blog-app-y9pg.onrender.com/articles' + id)
       .then(res => {
         console.log(res.data);
         // Refresh articles after deletion

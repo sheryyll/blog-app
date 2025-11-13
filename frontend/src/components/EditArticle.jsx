@@ -24,7 +24,7 @@ function EditArticle() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/articles/${id}`);
+        const response = await axios.get(`https://blog-app-y9pg.onrender.com/articles/${id}`);
         const article = response.data;
         
         // Update state with fetched article data
@@ -73,7 +73,7 @@ function EditArticle() {
 
     try {
       // Update article via REST API
-      await axios.post(`http://localhost:5000/articles/update/${id}`, article);
+      await axios.post(`https://blog-app-y9pg.onrender.com/articles/update/${id}`, article);
       // Navigate back to article list after successful update
       navigate('/');
     } catch (err) {
