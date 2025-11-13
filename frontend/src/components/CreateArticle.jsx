@@ -2,13 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-/**
- * CreateArticle Component
- * Functional Component using React Hooks for state management
- * Demonstrates: useState, event handling, form submission
- */
 function CreateArticle() {
-  // State management using useState hook
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
@@ -18,20 +12,17 @@ function CreateArticle() {
 
   const navigate = useNavigate();
 
-  // Event handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
 
-    // Validate form
     if (!title.trim() || !content.trim()) {
       setError('Title and content are required');
       setIsSubmitting(false);
       return;
     }
 
-    // Prepare tags array from comma-separated string
     const tagsArray = tags
       .split(',')
       .map(tag => tag.trim())
@@ -45,9 +36,9 @@ function CreateArticle() {
     };
 
     try {
-      // Create article via REST API
+    
       await axios.post('https://blog-app-y9pg.onrender.com/articles', article);
-      // Navigate back to article list after successful creation
+      
       navigate('/');
     } catch (err) {
       console.error('Error creating article:', err);
@@ -56,7 +47,7 @@ function CreateArticle() {
     }
   };
 
-  // Event handler for cancel button
+
   const handleCancel = () => {
     navigate('/');
   };

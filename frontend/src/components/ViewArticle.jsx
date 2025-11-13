@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 
-/**
- * ViewArticle Component
- * Functional Component for displaying a single article
- * Demonstrates: useState, useEffect, event handling
- */
 function ViewArticle() {
   const { id } = useParams();
   const navigate = useNavigate();

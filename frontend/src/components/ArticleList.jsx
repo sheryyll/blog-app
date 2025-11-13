@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-/*
-  This is a small, reusable Functional Component.
-  It just displays a single row in the article table.
-  Demonstrates: Functional components, props, event handling
-*/
 const Article = props => (
   <tr>
     <td>
@@ -50,21 +45,16 @@ const Article = props => (
   </tr>
 )
 
-/*
-  This is the main Class Component.
-  Demonstrates: Class components, state management, lifecycle methods, event handling
-*/
+
 export default class ArticleList extends Component {
   constructor(props) {
     super(props);
 
-    // Bind the 'this' context for event handlers
     this.deleteArticle = this.deleteArticle.bind(this);
     this.handleTagFilter = this.handleTagFilter.bind(this);
     this.handleDateFilter = this.handleDateFilter.bind(this);
     this.clearFilters = this.clearFilters.bind(this);
 
-    // Initialize state with articles array and filters
     this.state = { 
       articles: [],
       filteredArticles: [],
@@ -74,21 +64,20 @@ export default class ArticleList extends Component {
     };
   }
 
-  // Lifecycle method - runs automatically when component is mounted
+  
   componentDidMount() {
     this.fetchArticles();
   }
 
-  // Method to fetch articles from the backend API
   fetchArticles = () => {
-    // Send a GET request to our backend API (without filters)
+  
     axios.get('https://blog-app-y9pg.onrender.com/articles')
       .then(response => {
         const articles = response.data;
-        // Extract all unique tags from all articles
+       
         const allTags = [...new Set(articles.flatMap(article => article.tags || []))];
         
-        // Update the component's state
+        
         this.setState({ 
           articles: articles,
           filteredArticles: articles,
@@ -101,25 +90,25 @@ export default class ArticleList extends Component {
       });
   }
 
-  // Event handler for tag filter change
+
   handleTagFilter(event) {
     const tagFilter = event.target.value;
     this.setState({ tagFilter }, () => {
-      // Refetch with updated filter state
+  
       this.fetchArticlesWithFilters();
     });
   }
 
-  // Event handler for date filter change
+
   handleDateFilter(event) {
     const dateFilter = event.target.value;
     this.setState({ dateFilter }, () => {
-      // Refetch with updated filter state
+      
       this.fetchArticlesWithFilters();
     });
   }
 
-  // Method to fetch articles with current filter state
+  
   fetchArticlesWithFilters = () => {
     const params = {};
     if (this.state.tagFilter) {
@@ -132,7 +121,7 @@ export default class ArticleList extends Component {
     axios.get('https://blog-app-y9pg.onrender.com/articles', { params })
       .then(response => {
         const articles = response.data;
-        // Get all unique tags from ALL articles (fetch once without filters for tags dropdown)
+       
         this.fetchAllTags().then(allTags => {
           this.setState({ 
             articles: articles,
@@ -147,7 +136,7 @@ export default class ArticleList extends Component {
       });
   };
 
-  // Helper method to fetch all tags from all articles
+ 
   fetchAllTags = () => {
     return axios.get('https://blog-app-y9pg.onrender.com/articles')
       .then(response => {
@@ -157,20 +146,20 @@ export default class ArticleList extends Component {
       .catch(() => []);
   };
 
-  // Event handler to clear all filters
+
   clearFilters() {
     this.setState({ tagFilter: '', dateFilter: '' }, () => {
-      this.fetchArticles(); // Refetch without filters
+      this.fetchArticles(); 
     });
   }
 
-  // Event handler for the delete button
+ 
   deleteArticle(id) {
-    // Send a DELETE request to the backend
+    
     axios.delete('https://blog-app-y9pg.onrender.com/articles' + id)
       .then(res => {
         console.log(res.data);
-        // Refresh articles after deletion
+       
         this.fetchArticles();
       })
       .catch((error) => {
@@ -179,7 +168,7 @@ export default class ArticleList extends Component {
       });
   }
 
-  // Helper method to map over the articles and render a row for each one
+  
   articleList() {
     const articlesToDisplay = this.state.tagFilter || this.state.dateFilter 
       ? this.state.filteredArticles 
@@ -204,7 +193,7 @@ export default class ArticleList extends Component {
     });
   }
 
-  // The main render method that displays the component
+  
   render() {
     return (
       <div>

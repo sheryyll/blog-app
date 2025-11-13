@@ -2,16 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-/**
- * EditArticle Component
- * Functional Component using React Hooks (useState, useEffect)
- * Demonstrates: state management, side effects, event handling, URL parameters
- */
 function EditArticle() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // State management using useState hooks
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
@@ -20,14 +14,14 @@ function EditArticle() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // useEffect hook to fetch article data when component mounts
+ 
   useEffect(() => {
     const fetchArticle = async () => {
       try {
         const response = await axios.get(`https://blog-app-y9pg.onrender.com/articles/${id}`);
         const article = response.data;
         
-        // Update state with fetched article data
+       
         setTitle(article.title || '');
         setContent(article.content || '');
         setAuthor(article.author || '');
@@ -45,20 +39,18 @@ function EditArticle() {
     }
   }, [id]);
 
-  // Event handler for form submission
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
 
-    // Validate form
     if (!title.trim() || !content.trim()) {
       setError('Title and content are required');
       setIsSubmitting(false);
       return;
     }
 
-    // Prepare tags array from comma-separated string
     const tagsArray = tags
       .split(',')
       .map(tag => tag.trim())
