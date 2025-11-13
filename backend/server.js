@@ -10,7 +10,7 @@ const cors = require('cors');
 
 
 const corsOptions = {
-  origin: 'https://blog-app-smoky-tau.vercel.app'
+  origin: 'https://blog-n2b7czrs8-jenishas-projects-e2c82fb2.vercel.app'
 };
 
 app.use(cors(corsOptions));
