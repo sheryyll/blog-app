@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+:root {
+--primary: #BAA8D6;   /* Soft lavender purple */
+--secondary: #BDD299; /* Misty sage green */
+--accent: #E6A8AD;    /* Rosy pink */
+--background: #FDF9F6; /* Warm cream */
+--surface: #FFFFFF;   /* Clean card base */
+--text: #5B5B5B;      /* Soft gray */
+--highlight: #EED3B7; /* Peachy beige */
+
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--text);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text);
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+/* Links */
+a {
+  font-weight: 500;
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--secondary);
+}
+
+/* 🌈 Navbar */
+.navbar {
+  background-color: var(--surface);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  padding: 0.75rem 1.5rem;
+}
+
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  /* -webkit-background-clip: text; */
+  /* -webkit-text-fill-color: transparent; */
+  background-clip: text;
+  letter-spacing: 1px;
+}
+
+.nav-link {
+  color: var(--text);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.nav-link.active {
+  color: var(--primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary);
+}
+
+/* ✨ Buttons */
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: var(--surface);
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  background-color: #8A8AD6; /* Slightly darker lavender */
+  border-color: #8A8AD6;
+  color: var(--surface);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--surface);
+  border: 1px solid var(--secondary);
+  color: var(--secondary);
+  transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+  background-color: var(--secondary);
+  color: var(--surface);
+  transform: translateY(-1px);
+}
+
+.btn-accent {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+.btn-accent:hover {
+  background-color: #94DFAE; /* Slightly deeper mint */
+  transform: translateY(-1px);
+}
+
+/* Danger Button (for delete etc.) */
+.btn-danger {
+  background-color: #F87171;
+  border-color: #F87171;
+  color: var(--surface);
+  transition: all 0.3s ease;
+}
+.btn-danger:hover {
+  background-color: #DC2626;
+  border-color: #DC2626;
+  transform: translateY(-1px);
+}
