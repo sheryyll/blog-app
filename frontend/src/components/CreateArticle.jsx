@@ -37,7 +37,7 @@ function CreateArticle() {
 
     try {
     
-      await axios.post('https://blog-app-y9pg.onrender.com/articles', article);
+      await axios.post('https://blog-app-y9pg.onrender.com/api/articles/add', article);
       
       navigate('/');
     } catch (err) {

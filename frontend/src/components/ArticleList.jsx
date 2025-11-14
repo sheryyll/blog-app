@@ -71,7 +71,7 @@ export default class ArticleList extends Component {
 
   fetchArticles = () => {
   
-    axios.get('https://blog-app-y9pg.onrender.com/articles')
+    axios.get('https://blog-app-y9pg.onrender.com/api/articles')
       .then(response => {
         const articles = response.data;
        
@@ -118,7 +118,7 @@ export default class ArticleList extends Component {
       params.date = this.state.dateFilter;
     }
 
-    axios.get('https://blog-app-y9pg.onrender.com/articles', { params })
+    axios.get('https://blog-app-y9pg.onrender.com/api/articles', { params })
       .then(response => {
         const articles = response.data;
        
@@ -138,7 +138,7 @@ export default class ArticleList extends Component {
 
  
   fetchAllTags = () => {
-    return axios.get('https://blog-app-y9pg.onrender.com/articles')
+    return axios.get('https://blog-app-y9pg.onrender.com/api/articles')
       .then(response => {
         const allTags = [...new Set(response.data.flatMap(article => article.tags || []))];
         return allTags.sort();
@@ -156,7 +156,7 @@ export default class ArticleList extends Component {
  
   deleteArticle(id) {
     
-    axios.delete('https://blog-app-y9pg.onrender.com/articles' + id)
+    axios.delete('https://blog-app-y9pg.onrender.com/api/articles' + id)
       .then(res => {
         console.log(res.data);
        
