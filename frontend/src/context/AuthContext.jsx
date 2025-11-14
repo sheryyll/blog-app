@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
       if (token) {
         try {
-          const response = await axios.get('https://blog-app-y9pg.onrender.com/auth/me');
+          const response = await axios.get('https://blog-app-y9pg.onrender.com/api/auth/me');
           setUser(response.data.user);
         } catch (error) {
           console.error('Auth check failed:', error);
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (username, email, password, firstName, lastName) => {
     try {
-      const response = await axios.post('https://blog-app-y9pg.onrender.com/auth/signup', {
+      const response = await axios.post('https://blog-app-y9pg.onrender.com/api/auth/signup', {
         username,
         email,
         password,
