@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('https://blog-app-y9pg.onrender.com', {
+      const response = await axios.post('https://blog-app-y9pg.onrender.com/api/auth/login', {
         email,
         password
       });
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (username, email, password, firstName, lastName) => {
     try {
-      const response = await axios.post('http://localhost:5000/auth/signup', {
+      const response = await axios.post('https://blog-app-y9pg.onrender.com/auth/signup', {
         username,
         email,
         password,
