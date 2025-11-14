@@ -9,7 +9,12 @@ const cors = require('cors');
 
 
 const corsOptions = {
-  origin: 'https://blog-n2b7czrs8-jenishas-projects-e2c82fb2.vercel.app'
+  origin: [
+    'https://blog-app-smoky-tau.vercel.app',
+    'https://blog-n2b7czrs8-jenishas-projects-e2c82fb2.vercel.app'
+  ],
+  methods: "GET,POST,PUT,DELETE",
+  credentials: true
 };
 
 app.use(cors(corsOptions));
@@ -31,9 +36,17 @@ connection.on('error', (err) => {
 const articlesRouter = require('./routes/articles');
 const authRouter = require('./routes/auth');
 
-app.use('/articles', articlesRouter); 
-app.use('/auth', authRouter);
+app.use('/api/articles', articlesRouter); 
+app.use('/api/auth', authRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
+});
+
+app.get('/', (req, res) => {
+  res.send("Backend running!");
+});
+
+app.listen(port, () => {
+  console.log(`Server running on port: ${port}`);
 });
