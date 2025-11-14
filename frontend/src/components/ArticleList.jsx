@@ -1,52 +1,63 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
-const Article = props => (
-  <tr>
-    <td>
-      <Link 
-        to={`/view/${props.article._id}`} 
-        style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '500' }}
-      >
-        {props.article.title}
-      </Link>
-    </td>
-    <td>{props.article.author || 'Anonymous'}</td>
-    <td>{props.article.createdAt ? props.article.createdAt.substring(0,10) : 'N/A'}</td>
-    <td>
-      {props.article.tags && props.article.tags.length > 0 && (
-        <div className="mb-2">
-          {props.article.tags.slice(0, 3).map((tag, index) => (
-            <span key={index} className="tag-badge">{tag}</span>
-          ))}
-          {props.article.tags.length > 3 && (
-            <span className="tag-badge">+{props.article.tags.length - 3}</span>
+const Article = props => {
+  // Check if current user is the owner of the article
+  const isOwner = props.article.createdBy && 
+    (props.article.createdBy._id === props.currentUserId || 
+     props.article.createdBy === props.currentUserId);
+
+  return (
+    <tr>
+      <td>
+        <Link 
+          to={`/view/${props.article._id}`} 
+          style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: '500' }}
+        >
+          {props.article.title}
+        </Link>
+      </td>
+      <td>{props.article.author || 'Anonymous'}</td>
+      <td>{props.article.createdAt ? props.article.createdAt.substring(0,10) : 'N/A'}</td>
+      <td>
+        {props.article.tags && props.article.tags.length > 0 && (
+          <div className="mb-2">
+            {props.article.tags.slice(0, 3).map((tag, index) => (
+              <span key={index} className="tag-badge">{tag}</span>
+            ))}
+            {props.article.tags.length > 3 && (
+              <span className="tag-badge">+{props.article.tags.length - 3}</span>
+            )}
+          </div>
+        )}
+      </td>
+      <td>
+        <div className="action-buttons">
+          <Link to={`/view/${props.article._id}`} className="btn btn-sm btn-accent me-2">
+            View
+          </Link>
+          {isOwner && (
+            <>
+              <Link to={`/edit/${props.article._id}`} className="btn btn-sm btn-primary me-2">
+                Edit
+              </Link>
+              <button 
+                onClick={() => { props.deleteArticle(props.article._id) }} 
+                className="btn btn-sm btn-danger"
+              >
+                Delete
+              </button>
+            </>
           )}
         </div>
-      )}
-    </td>
-    <td>
-      <div className="action-buttons">
-        <Link to={`/view/${props.article._id}`} className="btn btn-sm btn-accent me-2">
-          View
-        </Link>
-        <Link to={`/edit/${props.article._id}`} className="btn btn-sm btn-primary me-2">
-          Edit
-        </Link>
-        <button 
-          onClick={() => { props.deleteArticle(props.article._id) }} 
-          className="btn btn-sm btn-danger"
-        >
-          Delete
-        </button>
-      </div>
-    </td>
-  </tr>
-)
+      </td>
+    </tr>
+  );
+}
 
-
-export default class ArticleList extends Component {
+class ArticleListClass extends Component {
   constructor(props) {
     super(props);
 
@@ -64,19 +75,15 @@ export default class ArticleList extends Component {
     };
   }
 
-  
   componentDidMount() {
     this.fetchArticles();
   }
 
   fetchArticles = () => {
-  
-    axios.get('https://blog-app-y9pg.onrender.com/api/articles')
+    axios.get('https://blog-app-y9pg.onrender.com/api/articles/')
       .then(response => {
         const articles = response.data;
-       
         const allTags = [...new Set(articles.flatMap(article => article.tags || []))];
-        
         
         this.setState({ 
           articles: articles,
@@ -90,25 +97,20 @@ export default class ArticleList extends Component {
       });
   }
 
-
   handleTagFilter(event) {
     const tagFilter = event.target.value;
     this.setState({ tagFilter }, () => {
-  
       this.fetchArticlesWithFilters();
     });
   }
-
 
   handleDateFilter(event) {
     const dateFilter = event.target.value;
     this.setState({ dateFilter }, () => {
-      
       this.fetchArticlesWithFilters();
     });
   }
 
-  
   fetchArticlesWithFilters = () => {
     const params = {};
     if (this.state.tagFilter) {
@@ -118,10 +120,9 @@ export default class ArticleList extends Component {
       params.date = this.state.dateFilter;
     }
 
-    axios.get('https://blog-app-y9pg.onrender.com/api/articles', { params })
+    axios.get('https://blog-app-y9pg.onrender.com/api/articles/', { params })
       .then(response => {
         const articles = response.data;
-       
         this.fetchAllTags().then(allTags => {
           this.setState({ 
             articles: articles,
@@ -136,9 +137,8 @@ export default class ArticleList extends Component {
       });
   };
 
- 
   fetchAllTags = () => {
-    return axios.get('https://blog-app-y9pg.onrender.com/api/articles')
+    return axios.get('https://blog-app-y9pg.onrender.com/api/articles/')
       .then(response => {
         const allTags = [...new Set(response.data.flatMap(article => article.tags || []))];
         return allTags.sort();
@@ -146,29 +146,28 @@ export default class ArticleList extends Component {
       .catch(() => []);
   };
 
-
   clearFilters() {
     this.setState({ tagFilter: '', dateFilter: '' }, () => {
-      this.fetchArticles(); 
+      this.fetchArticles();
     });
   }
 
- 
   deleteArticle(id) {
-    
-    axios.delete('https://blog-app-y9pg.onrender.com/api/articles' + id)
+    axios.delete('https://blog-app-y9pg.onrender.com/api/articles/' + id)
       .then(res => {
         console.log(res.data);
-       
         this.fetchArticles();
       })
       .catch((error) => {
         console.error('Error deleting article:', error);
-        alert('Failed to delete article. Please try again.');
+        if (error.response?.status === 403) {
+          alert('You can only delete your own articles.');
+        } else {
+          alert('Failed to delete article. Please try again.');
+        }
       });
   }
 
-  
   articleList() {
     const articlesToDisplay = this.state.tagFilter || this.state.dateFilter 
       ? this.state.filteredArticles 
@@ -188,12 +187,12 @@ export default class ArticleList extends Component {
       return <Article 
                 article={currentarticle} 
                 deleteArticle={this.deleteArticle} 
+                currentUserId={this.props.currentUserId}
                 key={currentarticle._id}
               />;
     });
   }
 
-  
   render() {
     return (
       <div>
@@ -272,3 +271,10 @@ export default class ArticleList extends Component {
   }
 }
 
+// Wrapper component to access auth context
+const ArticleList = () => {
+  const { user } = useAuth();
+  return <ArticleListClass currentUserId={user?.id} />;
+};
+
+export default ArticleList;

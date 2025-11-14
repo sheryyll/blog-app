@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 function ViewArticle() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,7 +37,11 @@ function ViewArticle() {
         navigate('/');
       } catch (err) {
         console.error('Error deleting article:', err);
-        setError('Failed to delete article. Please try again.');
+        if (err.response?.status === 403) {
+          setError('You can only delete your own articles.');
+        } else {
+          setError('Failed to delete article. Please try again.');
+        }
       }
     }
   };
@@ -111,14 +117,19 @@ function ViewArticle() {
 
             <hr className="mt-4" />
 
-            <div className="action-buttons mt-3">
-              <Link to={`/edit/${article._id}`} className="btn btn-primary">
-                Edit Article
-              </Link>
-              <button onClick={handleDelete} className="btn btn-danger">
-                Delete Article
-              </button>
-            </div>
+            {/* Only show edit/delete buttons if user is the owner */}
+            {article.createdBy && (
+              (article.createdBy._id === user?.id || article.createdBy === user?.id)
+            ) && (
+              <div className="action-buttons mt-3">
+                <Link to={`/edit/${article._id}`} className="btn btn-primary">
+                  Edit Article
+                </Link>
+                <button onClick={handleDelete} className="btn btn-danger">
+                  Delete Article
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 function CreateArticle() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
   const [tags, setTags] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,12 +32,12 @@ function CreateArticle() {
     const article = {
       title: title.trim(),
       content: content.trim(),
-      author: author.trim() || 'Anonymous',
+      author: user?.username || 'Anonymous',
       tags: tagsArray
     };
 
     try {
-    
+      // The backend will automatically set createdBy from the authenticated user
       await axios.post('https://blog-app-y9pg.onrender.com/api/articles/add', article);
       
       navigate('/');
@@ -77,20 +78,6 @@ function CreateArticle() {
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter article title"
                 required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="author" className="form-label">
-                Author
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="author"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                placeholder="Enter author name (optional)"
               />
             </div>
 

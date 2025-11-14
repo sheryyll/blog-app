@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 function EditArticle() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -13,6 +15,7 @@ function EditArticle() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [unauthorized, setUnauthorized] = useState(false);
 
  
   useEffect(() => {
@@ -21,7 +24,17 @@ function EditArticle() {
         const response = await axios.get(`https://blog-app-y9pg.onrender.com/api/articles/${id}`);
         const article = response.data;
         
-       
+        // Check if current user is the owner
+        const isOwner = article.createdBy && 
+          (article.createdBy._id === user?.id || article.createdBy === user?.id);
+        
+        if (!isOwner) {
+          setUnauthorized(true);
+          setError('You can only edit your own articles.');
+          setLoading(false);
+          return;
+        }
+        
         setTitle(article.title || '');
         setContent(article.content || '');
         setAuthor(article.author || '');
@@ -34,10 +47,10 @@ function EditArticle() {
       }
     };
 
-    if (id) {
+    if (id && user) {
       fetchArticle();
     }
-  }, [id]);
+  }, [id, user]);
 
 
   const handleSubmit = async (e) => {
@@ -70,7 +83,11 @@ function EditArticle() {
       navigate('/');
     } catch (err) {
       console.error('Error updating article:', err);
-      setError('Failed to update article. Please try again.');
+      if (err.response?.status === 403) {
+        setError('You can only edit your own articles.');
+      } else {
+        setError('Failed to update article. Please try again.');
+      }
       setIsSubmitting(false);
     }
   };
@@ -93,11 +110,11 @@ function EditArticle() {
     );
   }
 
-  if (error && !title) {
+  if (unauthorized || (error && !title && !loading)) {
     return (
       <div className="container mt-4">
         <div className="alert alert-danger" role="alert">
-          {error}
+          {error || 'You are not authorized to edit this article.'}
         </div>
         <button className="btn btn-primary" onClick={() => navigate('/')}>
           Back to Articles
