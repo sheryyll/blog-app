@@ -39,10 +39,6 @@ const authRouter = require('./routes/auth');
 app.use('/api/articles', articlesRouter); 
 app.use('/api/auth', authRouter);
 
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
-});
-
 app.get('/', (req, res) => {
   res.send("Backend running!");
 });
